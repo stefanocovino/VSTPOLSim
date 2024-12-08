@@ -279,7 +279,7 @@ Markdown.parse("""
 
 \\
 
-Below, again the distrinution of P values. Please, pay attention that for low S/N while Q and U are still realiable the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)).
+Below, again the distribution of P values. Please, pay attention that for low S/N while Q and U are still realiable the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)).
 """)
   ╠═╡ =#
 
