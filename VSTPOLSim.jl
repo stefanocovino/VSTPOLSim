@@ -91,7 +91,7 @@ md"#### Filter:"
 md"#### Exposure time (3 $\times$ a single exposure):"
 
 # ╔═╡ c3c87db3-86e4-4829-8eab-ed3fb0e5feb5
-@bind expt PlutoUI.Slider(0:1:600, default=60)
+@bind expt PlutoUI.Slider(0:1:1800, default=180)
 
 # ╔═╡ 0b748f2f-d326-486a-8007-6cffa34b2863
 md"### Target magnitude (AB):"
@@ -134,7 +134,7 @@ md"#### Linear polarization degree [0-1] and position angle:"
 
 # ╔═╡ 4bcaada3-2288-406e-92ba-e42ef633f85d
 Markdown.parse("""
-##### The target polarization is: $(SourcePol*100)% and the position angle θ=$(PosAngle)°
+##### The target polarization is: $(latexify(SourcePol*100,fmt="%.3f"))% and the position angle θ=$(PosAngle)°
 """)
 
 # ╔═╡ 70cb9f4c-3161-4e2b-8d9c-2617e206e17f
