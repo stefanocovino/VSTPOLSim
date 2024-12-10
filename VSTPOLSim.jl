@@ -280,6 +280,8 @@ Markdown.parse("""
 \\
 
 Below, again the distribution of P values. Please, pay attention that for low S/N while Q and U are still realiable the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)).
+
+In addition, to this estimate a sysyematic uncertainty of ∼0.1% has to be added. This is the estimated amount of resodual uncertainty after having removed instrumental polarisation (see [van Vorstenbosch (2019)](https://drive.google.com/file/d/1jfmqoKzsrbnryCbiTr9VCmQc8EOOuPEF/view?usp=sharing) master thesis).
 """)
   ╠═╡ =#
 
