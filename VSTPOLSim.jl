@@ -46,11 +46,11 @@ md"""
 
 ## Rationale
 
-- This polarimetric simulation is based on three-angle demodulation scheme, i.e., I assume to obtain three consecuitive frames with a rotation of the polaroid filter in between. Therefore, the expoture time refers to the whole procedure, i.e. the time needed to complete the three-frame sequence.
+- This polarimetric simulation is based on three-angle demodulation scheme, i.e., we assume to obtain three consecutive frames with a rotation of the polaroid filter in between. Therefore, the exposure time refers to the whole procedure, i.e. the time needed to complete the three-frame sequence.
 
-- This simulatoin is highly simlified. First of all statistical errors only are implemented. **VSTPOL**, due to its large filed of view, allows one to correct for various systematics down to about 0.1% level. Therefore, uncertaiunties below this figure are not realsitic, and 0.1% has to be cohsidered the floor level.
+- This simulaton is highly simplified. First of all only the statistical errors are implemented. As a matter of fact, **VSTPOL**, due to its large filed of view, allows one to correct for various systematics down to about 0.1% level. Therefore, uncertaiunties below this figure are not realistic, and 0.1% has to be cohsidered the floor level.
 
-- In addition, we are neglecting the background and assuming observstions are carried out at the zenith. These limitations might or might not be removed in future versions. Yet, since realistic poalrimetric observations will only be carried out for bright, in a pghotoemtric sense, sources neglectic the background should not be a real limitation.
+- In addition, we are neglecting the background and assuming observations are carried out at the zenith. These limitations might or might not be removed in future versions. Yet, since realistic polarimetric observations will only be carried out for bright, in a photometric sense, sources, neglectic the background should not be a real limitation.
 """
 
 # ╔═╡ 2c9a618c-ae3d-11ef-10d3-5940d6fa3f1b
@@ -174,7 +174,9 @@ First, let's now compute the number of photons per unit area and time generated 
 """)
 
 # ╔═╡ 46c6b4b6-d091-4517-9ebd-6a3c9de5e0f2
-md"The single frame exposure time is: $effTime"
+Markdown.parse("""
+The single frame exposure time is: $(latexify(effTime,fmt="%.1f"))
+""")
 
 # ╔═╡ 979dc4c8-2c9c-426d-afbc-87996c9ecc0f
 Markdown.parse("""
@@ -228,9 +230,9 @@ end;
 md"""
 ## Polarization computation
 
-We compute the uncertainties by a MonteCarlo simulation starting from the number of photons detected on a single frame.
+We compute the uncertainties by a MonteCarlo simulation starting from the number of photons detected on each frame.
 
-Below we can see distributions of Q and U values. 
+Below, we can see distributions of Q and U values. 
 """
 
 # ╔═╡ 92b8fcbb-0f7e-4f52-bc20-0ecb8922365e
@@ -279,9 +281,9 @@ Markdown.parse("""
 
 \\
 
-Below, again the distribution of P values. Please, pay attention that for low S/N while Q and U are still realiable the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)).
+And this is the distribution of P values. Please, pay attention that for low S/N Q and U are still realiable, but the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)).
 
-In addition, to this estimate a sysyematic uncertainty of ∼0.1% has to be added. This is the estimated amount of resodual uncertainty after having removed instrumental polarisation (see [van Vorstenbosch (2019)](https://drive.google.com/file/d/1jfmqoKzsrbnryCbiTr9VCmQc8EOOuPEF/view?usp=sharing) master thesis).
+In addition, to this estimate, as mentioned above, a sysyematic uncertainty of ∼0.1% has to be added. This is the estimated amount of resodual uncertainty after having removed instrumental polarisation (see [van Vorstenbosch (2019)](https://drive.google.com/file/d/1jfmqoKzsrbnryCbiTr9VCmQc8EOOuPEF/view?usp=sharing) master thesis).
 """)
   ╠═╡ =#
 
