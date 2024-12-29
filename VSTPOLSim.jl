@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 0.4, 27 Decemeber 2024
+v. 0.5, 27 Decemeber 2024
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -111,29 +111,25 @@ end;
 # ╔═╡ 7c626cac-df19-4811-a22b-fc915d9bbe04
 md"## Observation data"
 
-# ╔═╡ ada24cda-3672-4b17-9035-4eb412c5e832
-md"#### Filter:"
-
 # ╔═╡ 4b58ef33-4c97-49ab-baad-0960e4f74a25
-@bind filter Select(["g", "r"])
-
-# ╔═╡ d415e8cc-7115-48aa-8029-6f08411055e0
-md"#### Exposure time (3 $\times$ a single exposure [s]):"
+md"""
+#### Filter: $( @bind filter Select(["g", "r"]) )
+"""
 
 # ╔═╡ c3c87db3-86e4-4829-8eab-ed3fb0e5feb5
-@bind expt NumberField(0:10:3600, default=1800)
-
-# ╔═╡ 0b748f2f-d326-486a-8007-6cffa34b2863
-md"### Target magnitude (AB):"
+md"""
+#### Exposure time (3 $\times$ single exposure [s]): $( @bind expt NumberField(0:10:3600, default=1800) )
+"""
 
 # ╔═╡ f463f393-b3c7-4e16-a261-d362f2e7db97
-@bind inpm NumberField(8:0.1:20, default=16)
-
-# ╔═╡ 4446ac95-ee80-4918-af84-aee6bf287b7e
-md"### Target airmass:"
+md"""
+#### Target magnitude (AB): $( @bind inpm NumberField(8:0.1:20, default=16) )
+"""
 
 # ╔═╡ 426c0708-0700-45d4-b474-c3acdc7cf4de
-@bind airm NumberField(1:0.1:3, default=1)
+md"""
+#### Target airmass: $( @bind airm NumberField(1:0.1:3, default=1) )
+"""
 
 # ╔═╡ 0c80b44c-45fe-493d-8321-e194a2dcd0f3
 inpmag = inpm*UnitfulAstro.AB_mag;
@@ -152,14 +148,15 @@ Airmass: $(latexify(airm))
 # ╔═╡ 1f790553-7ed8-418d-a5f9-004a68842989
 md""
 
-# ╔═╡ b3726ec4-4a3e-4c52-9751-377a4eb56d00
-md"#### Linear polarization degree [0-1] and position angle (deg):"
-
 # ╔═╡ b35ec1f0-66ba-4861-88ed-3e26a32c3d45
-@bind SourcePol NumberField(0:0.001:1, default=0.01)
+md"""
+#### Linear polarization degree [0-1]: $( @bind SourcePol NumberField(0:0.001:1, default=0.01) )
+"""
 
 # ╔═╡ ba52668e-2d7b-4546-bba4-530dba2337fd
-@bind PosAngle NumberField(0:1:180, default=45)
+md"""
+#### Position angle (deg): $( @bind PosAngle NumberField(0:1:180, default=45) )
+"""
 
 # ╔═╡ 4bcaada3-2288-406e-92ba-e42ef633f85d
 Markdown.parse("""
@@ -2140,19 +2137,14 @@ version = "3.6.0+0"
 # ╟─58463717-1171-4313-926a-02b3f0197587
 # ╠═0b7504d1-1523-4de4-be38-eda85add30d3
 # ╟─7c626cac-df19-4811-a22b-fc915d9bbe04
-# ╟─ada24cda-3672-4b17-9035-4eb412c5e832
 # ╟─4b58ef33-4c97-49ab-baad-0960e4f74a25
-# ╟─d415e8cc-7115-48aa-8029-6f08411055e0
 # ╟─c3c87db3-86e4-4829-8eab-ed3fb0e5feb5
-# ╟─0b748f2f-d326-486a-8007-6cffa34b2863
 # ╟─f463f393-b3c7-4e16-a261-d362f2e7db97
-# ╟─4446ac95-ee80-4918-af84-aee6bf287b7e
 # ╟─426c0708-0700-45d4-b474-c3acdc7cf4de
 # ╠═0c80b44c-45fe-493d-8321-e194a2dcd0f3
 # ╠═e88757be-b564-4b48-8915-c4c36701b02b
 # ╟─cda876a9-d631-4dae-ae8e-4f8cd5fcd164
 # ╟─1f790553-7ed8-418d-a5f9-004a68842989
-# ╟─b3726ec4-4a3e-4c52-9751-377a4eb56d00
 # ╟─b35ec1f0-66ba-4861-88ed-3e26a32c3d45
 # ╟─ba52668e-2d7b-4546-bba4-530dba2337fd
 # ╟─4bcaada3-2288-406e-92ba-e42ef633f85d
