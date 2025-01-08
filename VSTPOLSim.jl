@@ -41,7 +41,7 @@ v. 0.6.0, 08 Juanuary 2025
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
 html"""
-<iframe src="https://drive.google.com/file/d/1GaLHWZQ6Zk0IAwOhYnYQjqiZeX_QlJmN/preview" width="200" allow="autoplay"></iframe>
+<iframe src="https://drive.google.com/file/d/1O20eL98ZDgKMMbgtezPoAcQ5bL88siHs/preview" width="200" allow="autoplay"></iframe>
 """
 
 # ╔═╡ 1f80474a-4a03-4360-b1ee-5852c67fc02d
