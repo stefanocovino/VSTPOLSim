@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 0.5.1, 04 Juanuary 2025
+v. 0.6.0, 08 Juanuary 2025
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -85,11 +85,23 @@ begin
 	rfnt = linear_interpolation(rtbl.λ, rtbl.Eff, extrapolation_bc = 0.)
 end;
 
+# ╔═╡ 1639aaa2-1f8c-49a2-a2c0-0790e53bdb3e
+begin
+	ppath = joinpath("data","Polaroid.csv")
+	pdata = CSV.File(ppath; comment="#",header=["λ", "Eff"])
+	ptbl = DataFrame(pdata)
+	ptbl.λ .= ptbl.λ.*u"nm"
+	ptbl.Eff = ptbl.Eff / 100
+	pfnt = linear_interpolation(ptbl.λ, ptbl.Eff, extrapolation_bc = 0.)
+	ptbl
+end;
+
 # ╔═╡ 2c9a618c-ae3d-11ef-10d3-5940d6fa3f1b
 begin
 	TelescopeAreaPrimario = 2.61u"m"/2
 	TelescopeAreaSecondario = 0.938u"m"/2
 	EffArea = π*(TelescopeAreaPrimario^2-TelescopeAreaSecondario^2)
+	qeffdir = Dict("g" => gfnt, "r" => rfnt)
 end;
 
 # ╔═╡ cc98c125-e243-4c19-9c8f-b59d7251f79f
@@ -101,12 +113,6 @@ Primary mirror diameter: $(latexify(2*TelescopeAreaPrimario,fmt="%.2f")) \\
 Secondary mirror diameter: $(latexify(2*TelescopeAreaSecondario,fmt="%.2f")) \\
 Telescope effective area: $(latexify(EffArea,fmt="%.2f")) 
 """)
-
-# ╔═╡ 0b7504d1-1523-4de4-be38-eda85add30d3
-begin
-	qeffdir = Dict("g" => gfnt, "r" => rfnt)
-	polareff = Dict("g" => 0.38, "r" => 0.45)
-end;
 
 # ╔═╡ 7c626cac-df19-4811-a22b-fc915d9bbe04
 md"## Observation data"
@@ -205,7 +211,7 @@ begin
 		γ = uconvert(u"Hz",bwidth)*EffArea*effTime*inpflux/(uconvert(u"erg*s",h)*c_0/uconvert(u"m",λ))
 		airmfct = 10^(-0.4*(extfnt(λ)*airm))
 		Numγ = Numγ + γ
-		EffNumγ = EffNumγ + γ*qeffdir[filter](λ)*airmfct*polareff[filter]
+		EffNumγ = EffNumγ + γ*qeffdir[filter](λ)*airmfct*pfnt(λ)
 	end
 end
 
@@ -2135,10 +2141,10 @@ version = "3.6.0+0"
 # ╠═0cbca675-d10e-490d-a487-2b109629df8c
 # ╠═f2124cef-5b7b-4108-99fe-ca31188ffe96
 # ╠═0114234a-6462-439f-adc9-49cabd464f5a
+# ╠═1639aaa2-1f8c-49a2-a2c0-0790e53bdb3e
 # ╠═2c9a618c-ae3d-11ef-10d3-5940d6fa3f1b
 # ╟─cc98c125-e243-4c19-9c8f-b59d7251f79f
 # ╟─58463717-1171-4313-926a-02b3f0197587
-# ╠═0b7504d1-1523-4de4-be38-eda85add30d3
 # ╟─7c626cac-df19-4811-a22b-fc915d9bbe04
 # ╟─4b58ef33-4c97-49ab-baad-0960e4f74a25
 # ╟─c3c87db3-86e4-4829-8eab-ed3fb0e5feb5
