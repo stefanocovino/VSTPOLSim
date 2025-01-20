@@ -49,7 +49,7 @@ md"""
 
 ## Rationale
 
-- This polarimetric simulation is based on three-angle demodulation scheme, i.e., we assume to obtain three consecutive frames with a rotation of the polaroid filter in between. Therefore, the exposure time refers to the whole procedure, i.e. the time needed to complete the three-frame sequence.
+- This polarimetric simulation is based on three-angle demodulation scheme, i.e., we assume to obtain a given number of cycles of three consecutive frames with a rotation of the polaroid filter in between. Therefore, the exposure time refers to the whole procedure, i.e. the time needed to complete the three-frame sequence times the number of cycles and related overheads.
 
 - This simulaton is highly simplified. First of all only the statistical errors are implemented. As a matter of fact, **VSTPOL**, due to its large field of view, allows one to correct for various systematics down to about 0.1% level. Therefore, uncertainties below this figure are not realistic, and 0.1% has to be considered the floor level.
 
