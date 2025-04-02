@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 0.7.0, 20 Juanuary 2025
+v. 0.8.0, 02 April 2025
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -51,7 +51,7 @@ md"""
 
 - This polarimetric simulation is based on three-angle demodulation scheme, i.e., we assume to obtain a given number of cycles of three consecutive frames with a rotation of the polaroid filter in between. Therefore, the exposure time refers to the whole procedure, i.e. the time needed to complete the three-frame sequence times the number of cycles and related overheads.
 
-- This simulaton is highly simplified. First of all only the statistical errors are implemented. As a matter of fact, **VSTPOL**, due to its large field of view, allows one to correct for various systematics down to about 0.1% level. Therefore, uncertainties below this figure are not realistic, and 0.1% has to be considered the floor level.
+- This simulaton is highly simplified. First of all, only the statistical errors are implemented. As a matter of fact, **VSTPOL**, due to its large field of view, allows one to correct for various systematics down to about 0.1% level. Therefore, uncertainties below this figure are not realistic, and 0.1% has to be considered the floor level.
 
 - In addition, we are neglecting the background. This limitation might or might not be removed in future versions. Yet, since realistic polarimetric observations will only be carried out for bright, in a photometric sense, sources, neglectic the background should not be a real limitation.
 """
@@ -312,9 +312,26 @@ begin
 end
   ╠═╡ =#
 
+# ╔═╡ 6417ef27-d692-4a76-8c16-97b820884100
+#=╠═╡
+Markdown.parse("""
+The obtained Stokes parameter values are:
+
+##### Q = $(latexify(mean(sQN),fmt="%.3g")) ± $(latexify(std(sQN),fmt="%.3g"))
+
+##### U = $(latexify(mean(sUN),fmt="%.3g")) ± $(latexify(std(sUN),fmt="%.3g"))
+
+""")
+  ╠═╡ =#
+
 # ╔═╡ 4b2c25cc-a319-486c-a966-6961400b83d2
 #=╠═╡
 dP = sqrt.(sQN.^2 .+ sUN.^2);
+  ╠═╡ =#
+
+# ╔═╡ 4fdfe02a-fc57-438d-9fc5-7030bc9b843c
+#=╠═╡
+std(dP)
   ╠═╡ =#
 
 # ╔═╡ 0a9712f3-103f-456e-a1b7-3c10d2fd251d
@@ -332,14 +349,38 @@ PresErr = 100*std(dP);
 SN = mean(dP)/std(dP);
   ╠═╡ =#
 
+# ╔═╡ 2695121e-03e1-43f8-8abf-6a6a4aba96ad
+#=╠═╡
+Ptrue = Pres*sqrt(1-(PresErr/Pres)^2);
+  ╠═╡ =#
+
+# ╔═╡ 0dca2699-94f4-4f96-b1e8-491a0f4ac69b
+#=╠═╡
+θ = 0.5*atand.(sUN,sQN);
+  ╠═╡ =#
+
+# ╔═╡ 3d4099b3-c7fc-47bf-8b45-f33eb1a3c4b1
+#=╠═╡
+θd = mean(θ);
+  ╠═╡ =#
+
+# ╔═╡ 348b705c-258b-464f-b30b-dd445755cfc5
+#=╠═╡
+eθd = std(θ);
+  ╠═╡ =#
+
 # ╔═╡ 12cefdc0-292b-47f0-98b8-78654821cdd8
 #=╠═╡
 Markdown.parse("""
-##### And, finally, the measured polarisation is: $(latexify(Pres,fmt="%.3f")) ± $(latexify(PresErr,fmt="%.3f"))% with a S/N of $(latexify(SN,fmt="%.2f")).
+##### And, finally, the measured polarisation is: $(latexify(Pres,fmt="%.3f")) ± $(latexify(PresErr,fmt="%.3f"))% with a S/N of $(latexify(SN,fmt="%.2f")),
+
+##### while the measured position angle is: $(latexify(θd,fmt="%.2f")) ± $(latexify(eθd,fmt="%.2f"))°.
 
 \\
 
 And below there is the distribution of P values. Please, pay attention that for low S/N Q and U are still realiable, but the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)).
+
+A simple "rule of the thumb" correcton would give: P ~ $(latexify(Ptrue,fmt="%.3f"))%.
 
 In addition, to this estimate, as mentioned above, a systematic uncertainty of ∼0.1% has to be added. This is the estimated amount of residual uncertainty after having removed instrumental polarisation (see [van Vorstenbosch (2019)](https://drive.google.com/file/d/1jfmqoKzsrbnryCbiTr9VCmQc8EOOuPEF/view?usp=sharing) master thesis).
 """)
@@ -396,7 +437,7 @@ UnitfulLatexify = "~1.6.4"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.2"
+julia_version = "1.11.4"
 manifest_format = "2.0"
 project_hash = "3bc01899a1e8fc3046396d96e445d079e76350cd"
 
@@ -1427,7 +1468,7 @@ version = "3.2.4+0"
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
-version = "0.8.1+2"
+version = "0.8.1+4"
 
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2191,10 +2232,16 @@ version = "3.6.0+0"
 # ╠═f962acb3-6971-4fdd-9178-f03fcb2cb301
 # ╟─e255bd41-ea2f-4995-8a39-9f950c067195
 # ╟─92b8fcbb-0f7e-4f52-bc20-0ecb8922365e
+# ╟─6417ef27-d692-4a76-8c16-97b820884100
+# ╠═4fdfe02a-fc57-438d-9fc5-7030bc9b843c
 # ╠═4b2c25cc-a319-486c-a966-6961400b83d2
 # ╠═0a9712f3-103f-456e-a1b7-3c10d2fd251d
 # ╠═bac32516-1616-4e07-aadd-bd5541ecc71b
 # ╠═a5edfacc-51a2-483c-adf5-ce6c4211783e
+# ╠═2695121e-03e1-43f8-8abf-6a6a4aba96ad
+# ╠═0dca2699-94f4-4f96-b1e8-491a0f4ac69b
+# ╠═3d4099b3-c7fc-47bf-8b45-f33eb1a3c4b1
+# ╠═348b705c-258b-464f-b30b-dd445755cfc5
 # ╟─12cefdc0-292b-47f0-98b8-78654821cdd8
 # ╟─730710bb-644b-4e48-acaa-2a72cda115c6
 # ╟─00000000-0000-0000-0000-000000000001
