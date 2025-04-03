@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 0.8.0, 02 April 2025
+v. 0.9.0, 03 April 2025
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -369,12 +369,21 @@ Ptrue = Pres*sqrt(1-(PresErr/Pres)^2);
 eθd = std(θ);
   ╠═╡ =#
 
+# ╔═╡ 50adadd9-3a6d-4d41-ad69-2dc28dc14963
+#=╠═╡
+sp2 = sqrt((mean(sQN)^2 * std(sQN)^2 + mean(sUN)^2 * std(sUN)^2)/(mean(sQN)^2 + mean(sUN)^2));
+  ╠═╡ =#
+
 # ╔═╡ 12cefdc0-292b-47f0-98b8-78654821cdd8
 #=╠═╡
 Markdown.parse("""
 ##### And, finally, the measured polarisation is: $(latexify(Pres,fmt="%.3f")) ± $(latexify(PresErr,fmt="%.3f"))% with a S/N of $(latexify(SN,fmt="%.2f")),
 
 ##### while the measured position angle is: $(latexify(θd,fmt="%.2f")) ± $(latexify(eθd,fmt="%.2f"))°.
+
+\\
+
+###### The polarisation error computed by the error propagation formula is $(latexify(100*sp2,fmt="%.3f"))%.
 
 \\
 
@@ -389,16 +398,25 @@ In addition, to this estimate, as mentioned above, a systematic uncertainty of �
 # ╔═╡ 730710bb-644b-4e48-acaa-2a72cda115c6
 #=╠═╡
 begin
-	fg2 = Figure()
+	fg2 = Figure(size=(1300,600))
 	
 	ax1fg2 = Axis(fg2[1, 1],
 	    xlabel = "P (%)",
 	    ylabel = "N"
 	    )
 	
-	hist!(100*dP,label="P")
+	hist!(100*dP,label="P",color=:blue)
 	
 	axislegend(ax1fg2)
+
+	ax2fg2 = Axis(fg2[1, 2],
+	    xlabel = "θ (°)",
+	    ylabel = "N"
+	    )
+	
+	hist!(θ,label="θ",color=:orange)
+	
+	axislegend(ax2fg2)
 	
 	fg2
 end
@@ -2242,6 +2260,7 @@ version = "3.6.0+0"
 # ╠═0dca2699-94f4-4f96-b1e8-491a0f4ac69b
 # ╠═3d4099b3-c7fc-47bf-8b45-f33eb1a3c4b1
 # ╠═348b705c-258b-464f-b30b-dd445755cfc5
+# ╠═50adadd9-3a6d-4d41-ad69-2dc28dc14963
 # ╟─12cefdc0-292b-47f0-98b8-78654821cdd8
 # ╟─730710bb-644b-4e48-acaa-2a72cda115c6
 # ╟─00000000-0000-0000-0000-000000000001
