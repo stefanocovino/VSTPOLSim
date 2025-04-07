@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 0.9.0, 03 April 2025
+v. 0.10.0, 07 April 2025
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -93,7 +93,6 @@ begin
 	ptbl.λ .= ptbl.λ.*u"nm"
 	ptbl.Eff = ptbl.Eff / 100
 	pfnt = linear_interpolation(ptbl.λ, ptbl.Eff, extrapolation_bc = 0.)
-	ptbl
 end;
 
 # ╔═╡ 2c9a618c-ae3d-11ef-10d3-5940d6fa3f1b
@@ -174,7 +173,7 @@ md"""
 
 # ╔═╡ ba52668e-2d7b-4546-bba4-530dba2337fd
 md"""
-#### Position angle (deg): $( @bind PosAngle NumberField(0:1:180, default=45) )
+#### Position angle (deg): $( @bind PosAngle NumberField(0.:1.:180., default=45.) )
 """
 
 # ╔═╡ 4bcaada3-2288-406e-92ba-e42ef633f85d
@@ -329,19 +328,19 @@ The obtained Stokes parameter values are:
 dP = sqrt.(sQN.^2 .+ sUN.^2);
   ╠═╡ =#
 
-# ╔═╡ 4fdfe02a-fc57-438d-9fc5-7030bc9b843c
-#=╠═╡
-std(dP)
-  ╠═╡ =#
-
 # ╔═╡ 0a9712f3-103f-456e-a1b7-3c10d2fd251d
 #=╠═╡
 Pres = 100*mean(dP);
   ╠═╡ =#
 
+# ╔═╡ e7bb603b-fa47-4901-90d5-cce1a4e02761
+#=╠═╡
+Pray = fit(Rayleigh,sqrt.((sQN.-mean(sQN)).^2 .+ (sUN.-mean(sUN)).^2));
+  ╠═╡ =#
+
 # ╔═╡ bac32516-1616-4e07-aadd-bd5541ecc71b
 #=╠═╡
-PresErr = 100*std(dP);
+PresErr = 100*params(Pray)[1];
   ╠═╡ =#
 
 # ╔═╡ a5edfacc-51a2-483c-adf5-ce6c4211783e
@@ -383,13 +382,13 @@ Markdown.parse("""
 
 \\
 
-###### The polarisation error computed by the error propagation formula is $(latexify(100*sp2,fmt="%.3f"))%.
+###### The polarisation error is computed fitting a Rayleigh distribution to the Q, and U centered distributions. For comparison, the polarisation error computed by the error propagation formula is $(latexify(100*sp2,fmt="%.3f"))%.
 
 \\
 
 And below there is the distribution of P values. Please, pay attention that for low S/N Q and U are still realiable, but the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)).
 
-A simple "rule of the thumb" correcton would give: P ~ $(latexify(Ptrue,fmt="%.3f"))%.
+A simple "rule of the thumb" correction would give: P ~ $(latexify(Ptrue,fmt="%.3f"))%.
 
 In addition, to this estimate, as mentioned above, a systematic uncertainty of ∼0.1% has to be added. This is the estimated amount of residual uncertainty after having removed instrumental polarisation (see [van Vorstenbosch (2019)](https://drive.google.com/file/d/1jfmqoKzsrbnryCbiTr9VCmQc8EOOuPEF/view?usp=sharing) master thesis).
 """)
@@ -2251,9 +2250,9 @@ version = "3.6.0+0"
 # ╟─e255bd41-ea2f-4995-8a39-9f950c067195
 # ╟─92b8fcbb-0f7e-4f52-bc20-0ecb8922365e
 # ╟─6417ef27-d692-4a76-8c16-97b820884100
-# ╠═4fdfe02a-fc57-438d-9fc5-7030bc9b843c
 # ╠═4b2c25cc-a319-486c-a966-6961400b83d2
 # ╠═0a9712f3-103f-456e-a1b7-3c10d2fd251d
+# ╠═e7bb603b-fa47-4901-90d5-cce1a4e02761
 # ╠═bac32516-1616-4e07-aadd-bd5541ecc71b
 # ╠═a5edfacc-51a2-483c-adf5-ce6c4211783e
 # ╠═2695121e-03e1-43f8-8abf-6a6a4aba96ad
