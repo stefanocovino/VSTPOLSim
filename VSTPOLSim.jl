@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 0.10.0, 07 April 2025
+v. 0.10.1, 08 April 2025
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -328,9 +328,9 @@ The obtained Stokes parameter values are:
 dP = sqrt.(sQN.^2 .+ sUN.^2);
   ╠═╡ =#
 
-# ╔═╡ 0a9712f3-103f-456e-a1b7-3c10d2fd251d
+# ╔═╡ a81a838a-ec0d-4c2e-a893-f183bd97c3f5
 #=╠═╡
-Pres = 100*mean(dP);
+Pres = 100*sqrt(mean(sQN)^2 + mean(sUN)^2);
   ╠═╡ =#
 
 # ╔═╡ e7bb603b-fa47-4901-90d5-cce1a4e02761
@@ -345,12 +345,7 @@ PresErr = 100*params(Pray)[1];
 
 # ╔═╡ a5edfacc-51a2-483c-adf5-ce6c4211783e
 #=╠═╡
-SN = mean(dP)/std(dP);
-  ╠═╡ =#
-
-# ╔═╡ 2695121e-03e1-43f8-8abf-6a6a4aba96ad
-#=╠═╡
-Ptrue = Pres*sqrt(1-(PresErr/Pres)^2);
+SN = Pres/PresErr;
   ╠═╡ =#
 
 # ╔═╡ 0dca2699-94f4-4f96-b1e8-491a0f4ac69b
@@ -382,13 +377,11 @@ Markdown.parse("""
 
 \\
 
-###### The polarisation error is computed fitting a Rayleigh distribution to the Q, and U centered distributions. For comparison, the polarisation error computed by the error propagation formula is $(latexify(100*sp2,fmt="%.3f"))%.
+###### The polarisation value and error is computed fitting a Rayleigh distribution to the Q, and U centered distributions. For comparison, the polarisation error computed by the error propagation formula is $(latexify(100*sp2,fmt="%.3f"))%.
 
 \\
 
-And below there is the distribution of P values. Please, pay attention that for low S/N Q and U are still realiable, but the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)).
-
-A simple "rule of the thumb" correction would give: P ~ $(latexify(Ptrue,fmt="%.3f"))%.
+And below there is the distribution of P values. Please, pay attention that for low S/N Q and U are still realiable, but the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)) or, as we did here, if the P distribution is available, by a fit with the correct statistical distribution (i.e. the Rice or Rayleigh distributions).
 
 In addition, to this estimate, as mentioned above, a systematic uncertainty of ∼0.1% has to be added. This is the estimated amount of residual uncertainty after having removed instrumental polarisation (see [van Vorstenbosch (2019)](https://drive.google.com/file/d/1jfmqoKzsrbnryCbiTr9VCmQc8EOOuPEF/view?usp=sharing) master thesis).
 """)
@@ -2251,11 +2244,10 @@ version = "3.6.0+0"
 # ╟─92b8fcbb-0f7e-4f52-bc20-0ecb8922365e
 # ╟─6417ef27-d692-4a76-8c16-97b820884100
 # ╠═4b2c25cc-a319-486c-a966-6961400b83d2
-# ╠═0a9712f3-103f-456e-a1b7-3c10d2fd251d
+# ╠═a81a838a-ec0d-4c2e-a893-f183bd97c3f5
 # ╠═e7bb603b-fa47-4901-90d5-cce1a4e02761
 # ╠═bac32516-1616-4e07-aadd-bd5541ecc71b
 # ╠═a5edfacc-51a2-483c-adf5-ce6c4211783e
-# ╠═2695121e-03e1-43f8-8abf-6a6a4aba96ad
 # ╠═0dca2699-94f4-4f96-b1e8-491a0f4ac69b
 # ╠═3d4099b3-c7fc-47bf-8b45-f33eb1a3c4b1
 # ╠═348b705c-258b-464f-b30b-dd445755cfc5
