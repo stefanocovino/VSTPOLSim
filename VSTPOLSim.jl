@@ -54,6 +54,8 @@ md"""
 - This simulaton is highly simplified. First of all, only the statistical errors are implemented. As a matter of fact, **VSTPOL**, due to its large field of view, allows one to correct for various systematics down to about 0.1% level. Therefore, uncertainties below this figure are not realistic, and 0.1% has to be considered the floor level.
 
 - In addition, we are neglecting the background. This limitation might or might not be removed in future versions. Yet, since realistic polarimetric observations will only be carried out for bright, in a photometric sense, sources, neglectic the background should not be a real limitation.
+
+- One more important consideration. This is a simulation, real polarimetric observstions with **VSTPOL** will require multiple frames (three in the present case) that can, and will, be affected by any sort of observational noise (transparency variations, etc.) not considered here. These factors can only be partially removed by the calibration procedure and therefore the results from this ETC are unavoidably somehow better than what it can be obtained by any real observations.
 """
 
 # ╔═╡ 0cbca675-d10e-490d-a487-2b109629df8c
