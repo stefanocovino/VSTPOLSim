@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 0.11.0, 11 April 2025
+v. 0.11.1, 11 April 2025
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -238,8 +238,8 @@ begin
 		airmfct = 10^(-0.4*(extfnt(λ)*airm))
 		Numγ = Numγ + γ
 		EffNumγ = EffNumγ + γ*qeffdir[filter](λ)*airmfct*pfnt(λ)
-		Numγsky = Numγsky + γ
-		EffNumγsky = EffNumγsky + γ*qeffdir[filter](λ)*airmfct*pfnt(λ)
+		Numγsky = Numγsky + γsky
+		EffNumγsky = EffNumγsky + γsky*qeffdir[filter](λ)*airmfct*pfnt(λ)
 	end
 end
 
