@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 0.10.1, 08 April 2025
+v. 0.11.0, 11 April 2025
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -53,9 +53,9 @@ md"""
 
 - This simulaton is highly simplified. First of all, only the statistical errors are implemented. As a matter of fact, **VSTPOL**, due to its large field of view, allows one to correct for various systematics down to about 0.1% level. Therefore, uncertainties below this figure are not realistic, and 0.1% has to be considered the floor level.
 
-- In addition, we are neglecting the background. This limitation might or might not be removed in future versions. Yet, since realistic polarimetric observations will only be carried out for bright, in a photometric sense, sources, neglectic the background should not be a real limitation.
+- In addition, we are considering the night sky background only for new Moon considtions assuming a PSF of 1 arcsec. This limitation might or might not be removed in future versions.
 
-- One more important consideration. This is a simulation, real polarimetric observstions with **VSTPOL** will require multiple frames (three in the present case) that can, and will, be affected by any sort of observational noise (transparency variations, etc.) not considered here. These factors can only be partially removed by the calibration procedure and therefore the results from this ETC are unavoidably somehow better than what it can be obtained by any real observations.
+- Finally, this is of course only a simulation, real polarimetric observations with **VSTPOL** will require multiple frames (three in the present case) that can, and will, be affected by any sort of observational noise (transparency variations, etc.) not considered here. These factors can only be partially removed by the calibration procedure and therefore the results from this ETC are unavoidably somehow better than what it can be obtained by any real observations.
 """
 
 # ╔═╡ 0cbca675-d10e-490d-a487-2b109629df8c
@@ -105,6 +105,9 @@ begin
 	qeffdir = Dict("g" => gfnt, "r" => rfnt)
 end;
 
+# ╔═╡ 82c67a4d-2e7c-434d-89c9-5ba74ca9b6b5
+NightSky = Dict("g" => 22.14, "r" => 21.25);
+
 # ╔═╡ cc98c125-e243-4c19-9c8f-b59d7251f79f
 md"### Telescope data"
 
@@ -144,7 +147,10 @@ md"""
 """
 
 # ╔═╡ 0c80b44c-45fe-493d-8321-e194a2dcd0f3
-inpmag = inpm*UnitfulAstro.AB_mag;
+begin
+	inpmag = inpm*UnitfulAstro.AB_mag
+	skymag = NightSky[filter]*UnitfulAstro.AB_mag
+end;
 
 # ╔═╡ e88757be-b564-4b48-8915-c4c36701b02b
 begin
@@ -200,7 +206,10 @@ The demodulation schema is based on $ModSchema rotations of the polaroid filter 
 effTime = (1/ModSchema)*totexptime;
 
 # ╔═╡ 91e08587-bcd6-420a-be35-1118937388c7
-inpflux = uconvert(u"erg/(s*m^2*Hz)",inpmag);
+begin
+	inpflux = uconvert(u"erg/(s*m^2*Hz)",inpmag)
+	skyflux = uconvert(u"erg/(s*m^2*Hz)",skymag)
+end;
 
 # ╔═╡ 1c25900f-68a8-4382-9a63-0fe87b909474
 begin
@@ -220,12 +229,17 @@ First, let's now compute the number of photons per unit area and time generated 
 begin
 	Numγ = 0.
 	EffNumγ = 0.
+	Numγsky = 0.
+	EffNumγsky = 0.
 	for λ in range(start=minλ,stop=maxλ,step=1u"angstrom")
 		bwidth = c_0*u"angstrom"/uconvert(u"m",λ)^2
 		γ = uconvert(u"Hz",bwidth)*EffArea*effTime*inpflux/(uconvert(u"erg*s",h)*c_0/uconvert(u"m",λ))
+		γsky = uconvert(u"Hz",bwidth)*EffArea*effTime*skyflux/(uconvert(u"erg*s",h)*c_0/uconvert(u"m",λ))
 		airmfct = 10^(-0.4*(extfnt(λ)*airm))
 		Numγ = Numγ + γ
 		EffNumγ = EffNumγ + γ*qeffdir[filter](λ)*airmfct*pfnt(λ)
+		Numγsky = Numγsky + γ
+		EffNumγsky = EffNumγsky + γ*qeffdir[filter](λ)*airmfct*pfnt(λ)
 	end
 end
 
@@ -249,11 +263,17 @@ end;
 # ╔═╡ 8c5c8229-c1d7-4c95-a05b-d300713200e5
 ModMat = 0.5*[1 cosd(2*ang1) -sind(2*ang1); 1 cosd(2*ang2) -sind(2*ang2); 1 cosd(2*ang3) -sind(2*ang3)];
 
-# ╔═╡ b7ac2df4-e524-48e3-811c-01e6c11333ca
-inpStk = transpose([EffNumγ Q U]);
+# ╔═╡ 73059c7c-8cba-44c1-a026-bde009a65091
+begin
+	inpStk = transpose([EffNumγ Q U])
+	skyStk = transpose([EffNumγsky 0. 0.])
+end;
 
 # ╔═╡ db58515a-d1f5-4898-8ba8-919128242fd9
-Is = ModMat * inpStk;
+begin
+	Is = ModMat * inpStk
+	Issky = ModMat * skyStk
+end;
 
 # ╔═╡ c113159c-f52a-42d0-bd74-934da4cf8698
 md"""
@@ -266,9 +286,9 @@ We compute the uncertainties by a MonteCarlo simulation starting from the number
 # ╠═╡ skip_as_script = true
 #=╠═╡
 begin
-	dI0 = rand(Poisson(Is[1]),10000)
-	dI60 = rand(Poisson(Is[2]),10000)
-	dI120 = rand(Poisson(Is[3]),10000)
+	dI0 = rand(Poisson(Is[1]),10000)+rand(Poisson(Issky[1]),10000)-rand(Poisson(Issky[1]),10000)
+	dI60 = rand(Poisson(Is[2]),10000)+rand(Poisson(Issky[2]),10000)-rand(Poisson(Issky[2]),10000)
+	dI120 = rand(Poisson(Is[3]),10000)+rand(Poisson(Issky[3]),10000)-rand(Poisson(Issky[3]),10000)
 	dIs = transpose([dI0 dI60 dI120])
 end;
   ╠═╡ =#
@@ -2209,6 +2229,7 @@ version = "3.6.0+0"
 # ╠═0114234a-6462-439f-adc9-49cabd464f5a
 # ╠═1639aaa2-1f8c-49a2-a2c0-0790e53bdb3e
 # ╠═2c9a618c-ae3d-11ef-10d3-5940d6fa3f1b
+# ╠═82c67a4d-2e7c-434d-89c9-5ba74ca9b6b5
 # ╟─cc98c125-e243-4c19-9c8f-b59d7251f79f
 # ╟─58463717-1171-4313-926a-02b3f0197587
 # ╟─7c626cac-df19-4811-a22b-fc915d9bbe04
@@ -2235,7 +2256,7 @@ version = "3.6.0+0"
 # ╟─979dc4c8-2c9c-426d-afbc-87996c9ecc0f
 # ╠═3c261cff-8253-4974-b24a-888cb0d0b0a0
 # ╠═8c5c8229-c1d7-4c95-a05b-d300713200e5
-# ╠═b7ac2df4-e524-48e3-811c-01e6c11333ca
+# ╠═73059c7c-8cba-44c1-a026-bde009a65091
 # ╠═db58515a-d1f5-4898-8ba8-919128242fd9
 # ╟─c113159c-f52a-42d0-bd74-934da4cf8698
 # ╠═cfa3681a-4b62-4b9e-a326-5c64b07e0145
