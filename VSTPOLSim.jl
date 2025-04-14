@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 1.0.0, 14 April 2025
+v. 1.0.1, 14 April 2025
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -2283,7 +2283,7 @@ version = "3.6.0+0"
 # ╟─979dc4c8-2c9c-426d-afbc-87996c9ecc0f
 # ╟─c113159c-f52a-42d0-bd74-934da4cf8698
 # ╟─e255bd41-ea2f-4995-8a39-9f950c067195
-# ╠═92b8fcbb-0f7e-4f52-bc20-0ecb8922365e
+# ╟─92b8fcbb-0f7e-4f52-bc20-0ecb8922365e
 # ╟─6417ef27-d692-4a76-8c16-97b820884100
 # ╟─12cefdc0-292b-47f0-98b8-78654821cdd8
 # ╟─730710bb-644b-4e48-acaa-2a72cda115c6
