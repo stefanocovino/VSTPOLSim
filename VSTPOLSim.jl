@@ -495,7 +495,7 @@ As mentioned already, a systematic uncertainty of ∼0.1% has to be added. This 
 			   
 \\
 
-We alslo show the distribution of P values. For low S/N Q and U are still realiable, but the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)) or, as we did here, if the P distribution is available, by a fit with the correct statistical distribution (i.e. the Rice distributions).
+We also show the distribution of P values. For low S/N Q and U are still realiable, but the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)) or, as we did here, if the P distribution is available, by a fit with the correct statistical distribution (i.e. the Rice distributions).
 
 """)
   ╠═╡ =#
