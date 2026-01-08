@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 1.2.0, 08 January 2026
+v. 1.2.1, 08 January 2026
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -420,12 +420,10 @@ begin
 		Pray = fit(Rician,dP)
 		global PresErr = 100*params(Pray)[2]
 		global PresP = 100*params(Pray)[1]
-	catch y
-		if isa(y, DomainError)
-			PrayR = fit(Rayleigh,dP .- mean(dP))
-            global PresErr = 100*params(PrayR)[1]
-            global PresP = 100*mean(dP)
-		end
+	catch
+		PrayR = fit(Rayleigh,dP .- mean(dP))
+        global PresErr = 100*params(PrayR)[1]
+        global PresP = 100*mean(dP)
 	end
 	SN = PresP/PresErr
 	θ = 0.5*atand.(sUN,sQN)
@@ -464,7 +462,14 @@ end
 
 # ╔═╡ de2594d3-09b8-497c-9a40-20190573f2d1
 #=╠═╡
-pquant =  100*quantile(Rician(PresP/100,PresErr/100),[0.95,0.99]);
+begin
+	pquant = 0.
+	try
+		global pquant =  100*quantile(Rician(PresP/100,PresErr/100),[0.95,0.99])
+	catch
+		global pquant =  100*quantile(Rayleigh(PresErr/100),[0.95,0.99])
+	end
+end;
   ╠═╡ =#
 
 # ╔═╡ 12cefdc0-292b-47f0-98b8-78654821cdd8
