@@ -36,7 +36,7 @@ end
 md"""
 # VSTPOL simulator
 ***
-v. 1.2.4, 02 February 2026
+v. 1.2.5, 09 March 2026
 """
 
 # ╔═╡ 69f0f450-f281-4f6f-aa11-ea07fda35004
@@ -134,6 +134,11 @@ We compute the uncertainties by a MonteCarlo simulation starting from the number
 # ╔═╡ e255bd41-ea2f-4995-8a39-9f950c067195
 md"""
 Below, we can see distributions of the Q and U values. 
+"""
+
+# ╔═╡ 881077f1-0388-404c-a5b0-01c0b8198bc4
+md"""
+!!! warning "Field calibration systematics!"
 """
 
 # ╔═╡ 8b53e6e9-323f-4911-bf0e-f8c4d221699b
@@ -433,6 +438,21 @@ begin
 end;
   ╠═╡ =#
 
+# ╔═╡ a3d6058e-6845-4230-9406-aa71c8205462
+#=╠═╡
+Markdown.parse("""
+###### Please, be aware that the uncertainties and the SNR associated to this measurement do not take into account the calibration uncertainty. 
+As mentioned already, a systematic uncertainty of ∼0.1% has to be added. This is the estimated amount of residual uncertainty after having removed instrumental polarisation (see [van Vorstenbosch 2019,](https://drive.google.com/file/d/1jfmqoKzsrbnryCbiTr9VCmQc8EOOuPEF/view?usp=sharing) master thesis).
+
+##### The estimated polarization error including field calibration is therefore: $(latexify(sqrt(PresErr^2+0.1^2),fmt="%.3f"))%.
+			   
+\\
+
+We also show the distribution of P values. For low S/N Q and U are still realiable, but the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)) or, as we did here, if the P distribution is available, by a fit with the correct statistical distribution (i.e. the Rice distributions).
+
+""")
+  ╠═╡ =#
+
 # ╔═╡ 730710bb-644b-4e48-acaa-2a72cda115c6
 #=╠═╡
 begin
@@ -486,17 +506,6 @@ Markdown.parse("""
 \\
 
 ###### The polarisation value and error is computed fitting a Rician distribution to the Q, and U distributions. For comparison, the polarisation error computed by the error propagation formula is $(latexify(100*sp2,fmt="%.3f"))%.
-
-###### Please, be aware that the uncertainties and the SNR associated to this measurement do not take into account the calibration uncertainty. 
-As mentioned already, a systematic uncertainty of ∼0.1% has to be added. This is the estimated amount of residual uncertainty after having removed instrumental polarisation (see [van Vorstenbosch 2019,](https://drive.google.com/file/d/1jfmqoKzsrbnryCbiTr9VCmQc8EOOuPEF/view?usp=sharing) master thesis).
-
-##### The estimated polarization error including field calibration is therefore: $(latexify(sqrt(PresErr^2+0.1^2),fmt="%.3f"))%.
-
-			   
-\\
-
-We also show the distribution of P values. For low S/N Q and U are still realiable, but the distribution of polarization becomes increasingly biased and needs proper corrections (see, e.g. [Plaszczynski et al. (2014)](https://ui.adsabs.harvard.edu/abs/2014MNRAS.439.4048P/abstract)) or, as we did here, if the P distribution is available, by a fit with the correct statistical distribution (i.e. the Rice distributions).
-
 """)
   ╠═╡ =#
 
@@ -533,7 +542,7 @@ UnitfulLatexify = "~1.7.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.12.4"
+julia_version = "1.12.5"
 manifest_format = "2.0"
 project_hash = "b22a7e2bd4fefbfb9764d1c1434c67d2b3455092"
 
@@ -2359,6 +2368,8 @@ version = "4.1.0+0"
 # ╟─92b8fcbb-0f7e-4f52-bc20-0ecb8922365e
 # ╟─6417ef27-d692-4a76-8c16-97b820884100
 # ╟─12cefdc0-292b-47f0-98b8-78654821cdd8
+# ╟─881077f1-0388-404c-a5b0-01c0b8198bc4
+# ╟─a3d6058e-6845-4230-9406-aa71c8205462
 # ╟─730710bb-644b-4e48-acaa-2a72cda115c6
 # ╟─8b53e6e9-323f-4911-bf0e-f8c4d221699b
 # ╟─f923e1fb-d74a-4d54-b520-9e3e08645a29
